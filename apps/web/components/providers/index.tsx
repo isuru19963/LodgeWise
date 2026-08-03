@@ -1,14 +1,17 @@
-"use client";
+"use client"
 
-import type { ReactNode } from "react";
+import type { ReactNode } from "react"
 
-import { QueryProvider } from "./query-provider";
-import { ThemeProvider } from "./theme-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider"
+import { AuthProvider } from "@/providers/auth-provider"
+import { QueryProvider } from "@/providers/query-provider"
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
-      <QueryProvider>{children}</QueryProvider>
+      <QueryProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </QueryProvider>
     </ThemeProvider>
-  );
+  )
 }

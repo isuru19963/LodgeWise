@@ -25,10 +25,10 @@ export default function LandingPage() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Button asChild>
-            <Link href="/overview">Open dashboard</Link>
+            <Link href="/login">Sign in</Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/login">Sign in</Link>
+            <Link href="/overview">Open dashboard</Link>
           </Button>
         </div>
       </div>

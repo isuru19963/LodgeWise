@@ -27,13 +27,22 @@ components/
 lib/navigation.ts                 # Dashboard nav items
 ```
 
-Overview lives at `/overview` so the marketing landing can keep `/`. No API wiring yet — pages use empty states and placeholder cards only.
+## Auth & API foundation
 
-Conventions:
+```
+lib/api-client.ts       # fetch wrapper, Bearer token, 401 → refresh
+lib/auth.ts             # Zod schemas, cookie token helpers
+lib/auth-cookies.ts     # Cookie names (shared with middleware)
+services/auth-service.ts
+services/user-service.ts
+hooks/use-auth.ts
+hooks/use-user.ts
+providers/auth-provider.tsx
+providers/query-provider.tsx
+middleware.ts           # Protects dashboard routes → /login
+```
 
-- Server components by default; `"use client"` only where interactivity
-  requires it (providers, forms, nav).
-- Add shadcn primitives with `npx shadcn@latest add <component>`.
+Tokens live in cookies (`lw_access_token`, `lw_refresh_token`) so middleware can guard `/overview`, `/properties`, and other dashboard paths. No registration UI yet.
 
 ## Getting started
 
@@ -46,7 +55,7 @@ npm install
 npm run dev
 ```
 
-Open <http://localhost:3000>. Dashboard: <http://localhost:3000/overview>. Login shell: <http://localhost:3000/login>.
+Open <http://localhost:3000>. Sign in at <http://localhost:3000/login> (API at `NEXT_PUBLIC_API_URL`).
 
 ## Scripts
 
