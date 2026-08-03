@@ -47,6 +47,18 @@ features/units/
 └── services/     # GET/POST /units (+ unit-types)
 ```
 
+### Bookings feature
+
+```
+features/bookings/
+├── components/   # list, form, card, calendar, status badge
+├── hooks/        # useBookings, useAvailability, useGuests
+├── schemas/
+└── services/     # GET/POST /bookings, GET /availability, guests
+```
+
+Pages: `/bookings`, `/calendar`
+
 ## Auth & API foundation
 
 ```
