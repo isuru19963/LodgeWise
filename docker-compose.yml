@@ -5,16 +5,15 @@
 #   cp .env.example .env
 #   docker compose up -d
 #
-# Services: PostgreSQL 17, Redis, and the FastAPI backend with hot reload
-# (apps/api is bind-mounted; code changes restart the server automatically).
-# Future services (web, ai, worker, nginx) will be added as they are scaffolded.
+# Services: PostgreSQL 17 + pgvector, Redis, FastAPI api, and the arq worker.
+# Future services (web, ai, nginx) will be added as they are scaffolded.
 # =============================================================================
 
 name: lodgwise-ai
 
 services:
   postgres:
-    image: postgres:17-alpine
+    image: pgvector/pgvector:pg17
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-lodgwise}
@@ -71,6 +70,26 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/docker/worker.Dockerfile
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./services/worker:/app
+    networks:
+      - lodgwise
+    depends_on:
       redis:
         condition: service_healthy
 

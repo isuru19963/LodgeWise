@@ -81,7 +81,7 @@ Requires [Docker](https://docs.docker.com/get-docker/) with Compose v2.
 
 ```bash
 cp .env.example .env      # configure local environment (defaults work out of the box)
-docker compose up -d      # start Postgres 17, Redis, and the API (hot reload)
+docker compose up -d      # start Postgres 17, Redis, API, and worker
 ```
 
 Then verify:
@@ -89,6 +89,7 @@ Then verify:
 - API health check: <http://localhost:8000/health> → `{"status": "ok"}`
 - API docs: <http://localhost:8000/api/v1/docs>
 - PostgreSQL on `localhost:5432`, Redis on `localhost:6379`
+- Worker logs: `docker compose logs -f worker`
 
 The API container bind-mounts `apps/api`, so code changes reload automatically.
 

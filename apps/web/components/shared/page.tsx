@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -13,6 +14,7 @@ type EmptyStateProps = {
   title: string
   description: string
   actionLabel?: string
+  actionHref?: string
   className?: string
 }
 
@@ -20,6 +22,7 @@ export function EmptyState({
   title,
   description,
   actionLabel,
+  actionHref,
   className,
 }: EmptyStateProps) {
   return (
@@ -31,7 +34,11 @@ export function EmptyState({
     >
       <h2 className="text-base font-medium tracking-tight">{title}</h2>
       <p className="mt-2 max-w-md text-sm text-muted-foreground">{description}</p>
-      {actionLabel ? (
+      {actionLabel && actionHref ? (
+        <Button variant="outline" size="sm" className="mt-5" asChild>
+          <Link href={actionHref}>{actionLabel}</Link>
+        </Button>
+      ) : actionLabel ? (
         <Button variant="outline" size="sm" className="mt-5" disabled>
           {actionLabel}
         </Button>

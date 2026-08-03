@@ -22,8 +22,9 @@ export default function OverviewPage() {
       </div>
       <EmptyState
         title="Your workspace is ready"
-        description="Connect the API to populate occupancy, arrivals, and revenue. Until then, explore the navigation to review each module’s empty state."
-        actionLabel="Connect data later"
+        description="Start by adding a property, then manage units, bookings, and guests from the sidebar."
+        actionLabel="Add property"
+        actionHref="/properties/new"
       />
     </PageShell>
   )

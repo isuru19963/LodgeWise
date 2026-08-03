@@ -27,6 +27,26 @@ components/
 lib/navigation.ts                 # Dashboard nav items
 ```
 
+Overview lives at `/overview` so the marketing landing can keep `/`.
+
+### Properties flow
+
+```
+/properties                     # list
+/properties/new                 # select type → details → save
+/properties/[id]/units          # manage units (features/units)
+```
+
+### Units feature
+
+```
+features/units/
+├── components/   # list, card, form, type selector
+├── hooks/        # useUnits, useCreateUnit
+├── schemas/      # Zod unit schemas
+└── services/     # GET/POST /units (+ unit-types)
+```
+
 ## Auth & API foundation
 
 ```
