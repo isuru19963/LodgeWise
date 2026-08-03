@@ -60,6 +60,7 @@ This is a monorepo. See the root [README](../README.md) for the layout and
 
 | Document | Purpose |
 |----------|---------|
+| [ARCHITECTURE_DECISIONS.md](./ARCHITECTURE_DECISIONS.md) | Key technical decisions and their rationale |
 | [PRODUCT_REQUIREMENTS.md](./PRODUCT_REQUIREMENTS.md) | Functional and non-functional requirements |
 | [SYSTEM_ARCHITECTURE.md](./SYSTEM_ARCHITECTURE.md) | Architecture, services, and infrastructure |
 | [DATABASE_DESIGN.md](./DATABASE_DESIGN.md) | Multi-tenant data model and schema strategy |

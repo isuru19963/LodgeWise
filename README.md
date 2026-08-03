@@ -17,15 +17,24 @@ multi-tenant SaaS platform designed to scale to 1000+ properties.
 ├── packages/
 │   ├── ui/               # Shared UI components (design system)
 │   ├── types/            # Shared TypeScript types (generated from OpenAPI)
-│   └── config/           # Shared lint/TS/env configuration
+│   ├── config/           # Shared lint/TS/env configuration
+│   ├── sdk/              # Typed API client SDK (generated from OpenAPI)
+│   └── validators/       # Shared validation schemas (zod)
 │
 ├── services/
 │   ├── ai/               # AI services: pricing, forecasting, guest messaging
-│   └── worker/           # Background jobs: OTA sync, emails, scheduled tasks
+│   ├── worker/           # Background jobs: OTA sync, emails, scheduled tasks
+│   └── integrations/     # Third-party connectors: OTAs, payments, messaging
 │
 ├── database/
 │   ├── migrations/       # Versioned schema migrations
-│   └── seeds/            # Local/dev seed data
+│   ├── seeds/            # Local/dev seed data
+│   └── diagrams/         # ERDs and schema diagrams
+│
+├── tests/
+│   ├── unit/             # Isolated tests for shared/domain logic
+│   ├── integration/      # API + database tests (real Postgres/Redis)
+│   └── e2e/              # Browser-driven end-to-end journeys
 │
 ├── docs/                 # Architecture & product documentation
 │
@@ -44,6 +53,7 @@ multi-tenant SaaS platform designed to scale to 1000+ properties.
 | Document | Contents |
 |----------|----------|
 | [PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) | Vision, users, capabilities |
+| [ARCHITECTURE_DECISIONS.md](docs/ARCHITECTURE_DECISIONS.md) | Key technical decisions and their rationale |
 | [PRODUCT_REQUIREMENTS.md](docs/PRODUCT_REQUIREMENTS.md) | Functional & non-functional requirements |
 | [SYSTEM_ARCHITECTURE.md](docs/SYSTEM_ARCHITECTURE.md) | Services, tenancy model, infrastructure |
 | [DATABASE_DESIGN.md](docs/DATABASE_DESIGN.md) | Data model & migration strategy |
