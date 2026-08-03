@@ -1,0 +1,60 @@
+# --- Environment & secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- Node / TypeScript ---
+node_modules/
+.next/
+out/
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.eslintcache
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# --- Databases & data ---
+*.sqlite3
+*.db
+pgdata/
+
+# --- Docker ---
+docker-compose.override.yml
+
+# --- IDE / OS ---
+.DS_Store
+.idea/
+*.swp
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# --- Logs & temp ---
+logs/
+*.log
+tmp/
+.cache/
+
+# --- ML / AI artifacts ---
+*.ckpt
+*.onnx
+models/artifacts/

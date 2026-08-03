@@ -1,0 +1,107 @@
+# =============================================================================
+# Lodgwise AI — Local Development Stack
+#
+# Infrastructure services only for now. Application services (web, api, ai,
+# worker) are stubbed and commented out until their Dockerfiles land in
+# infra/docker/ during Phase 0 scaffolding.
+#
+# Usage:
+#   cp .env.example .env
+#   docker compose up -d
+# =============================================================================
+
+name: lodgwise-ai
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lodgwise}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lodgwise}
+      POSTGRES_DB: ${POSTGRES_DB:-lodgwise}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lodgwise}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ---------------------------------------------------------------------------
+  # Application services — enable once scaffolded (Phase 0).
+  # ---------------------------------------------------------------------------
+
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: infra/docker/api.Dockerfile
+  #   env_file: .env
+  #   ports:
+  #     - "8000:8000"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+
+  # web:
+  #   build:
+  #     context: .
+  #     dockerfile: infra/docker/web.Dockerfile
+  #   env_file: .env
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - api
+
+  # ai:
+  #   build:
+  #     context: .
+  #     dockerfile: infra/docker/ai.Dockerfile
+  #   env_file: .env
+  #   ports:
+  #     - "8100:8100"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+
+  # worker:
+  #   build:
+  #     context: .
+  #     dockerfile: infra/docker/worker.Dockerfile
+  #   env_file: .env
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+
+  # nginx:
+  #   image: nginx:1.27-alpine
+  #   volumes:
+  #     - ./infra/nginx:/etc/nginx/conf.d:ro
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - web
+  #     - api
+
+volumes:
+  pgdata:
+  redisdata:
