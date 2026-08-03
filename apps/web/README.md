@@ -12,27 +12,28 @@ calendar, rates, housekeeping boards, billing, and AI insights.
 ## Layout
 
 ```
-app/                  # App Router: routes, layouts, globals.css
+app/
+├── (marketing)/page.tsx          # Landing at /
+├── (auth)/login/page.tsx         # /login
+└── (dashboard)/
+    ├── layout.tsx                # Sidebar + header shell
+    ├── overview/page.tsx         # /overview (dashboard home)
+    ├── properties|bookings|guests|calendar|ai|analytics|billing|settings/
 components/
-├── ui/               # shadcn/ui primitives (generated via CLI)
-├── shared/           # Reusable app components composed from primitives
-└── providers/        # QueryProvider, ThemeProvider, root Providers
-features/             # Feature modules (dashboard, bookings, … — empty by design)
-hooks/                # Shared React hooks
-lib/                  # Utilities (cn, …)
-services/             # API access layer (typed client — arrives with the SDK)
-types/                # Local TS types (shared types come from packages/types)
-public/               # Static assets
+├── layout/                       # Sidebar, header, navigation
+├── ui/                           # shadcn/ui primitives
+├── shared/                       # PageShell, StatCard, EmptyState
+└── providers/
+lib/navigation.ts                 # Dashboard nav items
 ```
+
+Overview lives at `/overview` so the marketing landing can keep `/`. No API wiring yet — pages use empty states and placeholder cards only.
 
 Conventions:
 
 - Server components by default; `"use client"` only where interactivity
-  requires it (providers, forms).
-- Feature code lives in `features/<name>/`, composed from `components/` and
-  `services/` — pages stay thin.
-- Add shadcn primitives with `npx shadcn@latest add <component>`; never edit
-  generated files in `components/ui` beyond what the CLI produces.
+  requires it (providers, forms, nav).
+- Add shadcn primitives with `npx shadcn@latest add <component>`.
 
 ## Getting started
 
@@ -45,8 +46,7 @@ npm install
 npm run dev
 ```
 
-Open <http://localhost:3000>. The backend API is expected at
-`NEXT_PUBLIC_API_URL` (see the repo-root `docker-compose.yml` to run it).
+Open <http://localhost:3000>. Dashboard: <http://localhost:3000/overview>. Login shell: <http://localhost:3000/login>.
 
 ## Scripts
 
