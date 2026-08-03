@@ -15,6 +15,7 @@ from app.core.exceptions import DomainError
 from app.database.session import engine
 from app.modules.auth.router import router as auth_router
 from app.modules.availability.router import router as availability_router
+from app.modules.billing.router import router as billing_router
 from app.modules.bookings.router import router as bookings_router
 from app.modules.guests.router import router as guests_router
 from app.modules.organizations.router import router as organizations_router
@@ -70,6 +71,7 @@ def create_app() -> FastAPI:
     app.include_router(guests_router, prefix=settings.api_prefix)
     app.include_router(bookings_router, prefix=settings.api_prefix)
     app.include_router(availability_router, prefix=settings.api_prefix)
+    app.include_router(billing_router, prefix=settings.api_prefix)
 
     return app
 

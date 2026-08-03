@@ -9,6 +9,13 @@ from app.modules.availability.models import (
     PricingRuleType,
     UnitAvailability,
 )
+from app.modules.billing.models import (
+    Invoice,
+    InvoiceStatus,
+    Plan,
+    Subscription,
+    SubscriptionStatus,
+)
 from app.modules.bookings.models import (
     Booking,
     BookingItem,
@@ -31,12 +38,17 @@ __all__ = [
     "BookingStatus",
     "Guest",
     "IdentificationType",
+    "Invoice",
+    "InvoiceStatus",
     "Organization",
     "PaymentStatus",
+    "Plan",
     "PricingRule",
     "PricingRuleType",
     "Property",
     "PropertyType",
+    "Subscription",
+    "SubscriptionStatus",
     "Unit",
     "UnitAvailability",
     "UnitStatus",

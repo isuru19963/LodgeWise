@@ -50,6 +50,12 @@ async def register(session: AsyncSession, data: RegisterRequest) -> tuple[User, 
         role=UserRole.OWNER,
     )
     session.add(user)
+    await session.flush()
+
+    from app.modules.billing.service import start_free_trial
+
+    await start_free_trial(session, organization.id)
+
     await session.commit()
     await session.refresh(user)
 

@@ -39,8 +39,12 @@ async def get_property(
 async def create_property(
     session: AsyncSession, tenant: TenantContext, data: PropertyCreate
 ) -> Property:
+    from app.modules.billing.service import assert_can_add_property
+
     if await repository.get_property_type(session, data.property_type_id) is None:
         raise NotFoundError("Property type not found")
+
+    await assert_can_add_property(session, tenant)
 
     prop = Property(organization_id=tenant.organization_id, **data.model_dump())
     session.add(prop)
