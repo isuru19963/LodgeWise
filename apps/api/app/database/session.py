@@ -24,8 +24,7 @@ SessionLocal = async_sessionmaker(
 async def get_db() -> AsyncIterator[AsyncSession]:
     """FastAPI dependency yielding a request-scoped database session.
 
-    The tenant context (`SET app.tenant_id`) will be attached here once
-    authentication lands — every session flows through this single choke point.
+    Tenant context (`SET app.tenant_id`) is applied by `TenantDB` for RLS.
     """
     async with SessionLocal() as session:
         yield session

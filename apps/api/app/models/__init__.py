@@ -3,6 +3,16 @@
 
 from app.models.organization import Organization
 from app.models.user import User, UserRole
+from app.modules.ai.models import (
+    Conversation,
+    ConversationChannel,
+    DocumentChunk,
+    DocumentStatus,
+    DocumentType,
+    KnowledgeDocument,
+    Message,
+    MessageRole,
+)
 from app.modules.availability.models import (
     AvailabilityStatus,
     PricingRule,
@@ -36,10 +46,18 @@ __all__ = [
     "Booking",
     "BookingItem",
     "BookingStatus",
+    "Conversation",
+    "ConversationChannel",
+    "DocumentChunk",
+    "DocumentStatus",
+    "DocumentType",
     "Guest",
     "IdentificationType",
     "Invoice",
     "InvoiceStatus",
+    "KnowledgeDocument",
+    "Message",
+    "MessageRole",
     "Organization",
     "PaymentStatus",
     "Plan",

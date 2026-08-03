@@ -37,6 +37,11 @@ class Settings(BaseSettings):
 
     log_level: str = "INFO"
 
+    # AI — provider names are abstractions only; real SDK calls land later.
+    llm_provider: str = "stub"
+    embedding_provider: str = "stub"
+    embedding_dimensions: int = 1536
+
     @property
     def is_production(self) -> bool:
         return self.environment == "production"
