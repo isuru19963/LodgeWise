@@ -14,6 +14,7 @@ from app.modules.bookings.models import (
     BookingItem,
     BookingStatus,
 )
+from app.modules.availability.service import assert_units_bookable
 from app.modules.bookings.schemas import BookingCreate, BookingItemCreate, BookingUpdate
 from app.modules.guests import repository as guests_repository
 from app.modules.properties import repository as properties_repository
@@ -70,6 +71,7 @@ async def _ensure_available(
             "Units not available for the selected dates: "
             + ", ".join(str(u) for u in sorted(conflicts))
         )
+    await assert_units_bookable(session, tenant, unit_ids, check_in, check_out)  # type: ignore[arg-type]
 
 
 async def list_bookings(

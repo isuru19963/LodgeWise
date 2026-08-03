@@ -3,6 +3,12 @@
 
 from app.models.organization import Organization
 from app.models.user import User, UserRole
+from app.modules.availability.models import (
+    AvailabilityStatus,
+    PricingRule,
+    PricingRuleType,
+    UnitAvailability,
+)
 from app.modules.bookings.models import (
     Booking,
     BookingItem,
@@ -19,6 +25,7 @@ from app.modules.properties.models import (
 )
 
 __all__ = [
+    "AvailabilityStatus",
     "Booking",
     "BookingItem",
     "BookingStatus",
@@ -26,9 +33,12 @@ __all__ = [
     "IdentificationType",
     "Organization",
     "PaymentStatus",
+    "PricingRule",
+    "PricingRuleType",
     "Property",
     "PropertyType",
     "Unit",
+    "UnitAvailability",
     "UnitStatus",
     "UnitType",
     "User",
