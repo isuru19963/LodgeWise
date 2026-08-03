@@ -9,11 +9,19 @@ import {
 import { bookingService } from "@/features/bookings/services/booking-service"
 import { useAuth } from "@/hooks/use-auth"
 
+export {
+  useCreateGuest,
+  useGuests,
+  guestQueryKeys,
+} from "@/features/guests/hooks/use-guests"
+
 export const bookingQueryKeys = {
   all: ["bookings"] as const,
-  list: (filters?: { property_id?: string; status?: BookingStatus }) =>
-    ["bookings", "list", filters ?? {}] as const,
-  guests: (search?: string) => ["guests", search ?? ""] as const,
+  list: (filters?: {
+    property_id?: string
+    guest_id?: string
+    status?: BookingStatus
+  }) => ["bookings", "list", filters ?? {}] as const,
   availability: (params: {
     property_id: string
     start_date: string
@@ -23,21 +31,13 @@ export const bookingQueryKeys = {
 
 export function useBookings(filters?: {
   property_id?: string
+  guest_id?: string
   status?: BookingStatus
 }) {
   const { isAuthenticated } = useAuth()
   return useQuery({
     queryKey: bookingQueryKeys.list(filters),
     queryFn: () => bookingService.listBookings(filters),
-    enabled: isAuthenticated,
-  })
-}
-
-export function useGuests(search?: string) {
-  const { isAuthenticated } = useAuth()
-  return useQuery({
-    queryKey: bookingQueryKeys.guests(search),
-    queryFn: () => bookingService.listGuests(search),
     enabled: isAuthenticated,
   })
 }
@@ -75,16 +75,6 @@ export function useCreateBooking() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: bookingQueryKeys.all })
       void queryClient.invalidateQueries({ queryKey: ["availability"] })
-    },
-  })
-}
-
-export function useCreateGuest() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: bookingService.createGuest,
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["guests"] })
     },
   })
 }

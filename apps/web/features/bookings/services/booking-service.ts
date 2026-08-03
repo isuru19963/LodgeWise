@@ -2,12 +2,10 @@ import { apiClient } from "@/lib/api-client"
 import {
   availabilityResponseSchema,
   bookingSchema,
-  guestSchema,
   type AvailabilityResponse,
   type Booking,
   type BookingFormInput,
   type BookingStatus,
-  type Guest,
 } from "@/features/bookings/schemas/booking-schema"
 
 export type ListBookingsParams = {
@@ -65,33 +63,5 @@ export const bookingService = {
     if (params.unit_type_id) query.set("unit_type_id", params.unit_type_id)
     const data = await apiClient<unknown>(`/availability?${query.toString()}`)
     return availabilityResponseSchema.parse(data)
-  },
-
-  async listGuests(search?: string): Promise<Guest[]> {
-    const query = new URLSearchParams()
-    if (search?.trim()) query.set("search", search.trim())
-    const qs = query.toString()
-    const data = await apiClient<unknown>(`/guests${qs ? `?${qs}` : ""}`)
-    return guestSchema.array().parse(data)
-  },
-
-  async createGuest(input: {
-    first_name: string
-    last_name: string
-    email?: string | null
-    phone?: string | null
-    notes?: string | null
-  }): Promise<Guest> {
-    const data = await apiClient<unknown>("/guests", {
-      method: "POST",
-      body: {
-        first_name: input.first_name.trim(),
-        last_name: input.last_name.trim(),
-        email: input.email?.trim() || null,
-        phone: input.phone?.trim() || null,
-        notes: input.notes?.trim() || null,
-      },
-    })
-    return guestSchema.parse(data)
   },
 }

@@ -43,22 +43,11 @@ export const bookingSchema = z.object({
   updated_at: z.string(),
 })
 
-export const guestSchema = z.object({
-  id: z.string().uuid(),
-  organization_id: z.string().uuid(),
-  first_name: z.string(),
-  last_name: z.string(),
-  email: z.string().nullable(),
-  phone: z.string().nullable(),
-  country: z.string().nullable(),
-  identification_type: z
-    .enum(["passport", "national_id", "driving_license", "other"])
-    .nullable(),
-  identification_number: z.string().nullable(),
-  notes: z.string().nullable(),
-  created_at: z.string(),
-  updated_at: z.string(),
-})
+export {
+  guestSchema,
+  guestDisplayName,
+  type Guest,
+} from "@/features/guests/schemas/guest-schema"
 
 export const availableUnitSchema = z.object({
   unit_id: z.string().uuid(),
@@ -132,7 +121,6 @@ export type BookingStatus = z.infer<typeof bookingStatusSchema>
 export type PaymentStatus = z.infer<typeof paymentStatusSchema>
 export type Booking = z.infer<typeof bookingSchema>
 export type BookingItem = z.infer<typeof bookingItemSchema>
-export type Guest = z.infer<typeof guestSchema>
 export type AvailableUnit = z.infer<typeof availableUnitSchema>
 export type AvailabilityResponse = z.infer<typeof availabilityResponseSchema>
 export type BookingFormInput = z.infer<typeof bookingFormSchema>
@@ -150,10 +138,6 @@ export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
   partial: "Partial",
   paid: "Paid",
   refunded: "Refunded",
-}
-
-export function guestDisplayName(guest: Guest): string {
-  return `${guest.first_name} ${guest.last_name}`.trim()
 }
 
 export function formatMoney(value: string | number): string {

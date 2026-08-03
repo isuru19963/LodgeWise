@@ -128,7 +128,12 @@ export function BookingForm({ defaultPropertyId }: BookingFormProps) {
         const guest = await createGuest.mutateAsync({
           first_name: guestFirst,
           last_name: guestLast,
-          notes: values.notes || null,
+          email: "",
+          phone: "",
+          country: "",
+          identification_type: "",
+          identification_number: "",
+          notes: values.notes || "",
         })
         guestId = guest.id
       } else if (!guestId) {

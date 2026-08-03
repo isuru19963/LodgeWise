@@ -14,6 +14,7 @@ from app.core.config import get_settings
 from app.core.exceptions import DomainError
 from app.database.session import engine
 from app.modules.ai.router import router as ai_router
+from app.modules.analytics.router import router as analytics_router
 from app.modules.auth.router import router as auth_router
 from app.modules.availability.router import router as availability_router
 from app.modules.billing.router import router as billing_router
@@ -74,6 +75,7 @@ def create_app() -> FastAPI:
     app.include_router(availability_router, prefix=settings.api_prefix)
     app.include_router(billing_router, prefix=settings.api_prefix)
     app.include_router(ai_router, prefix=settings.api_prefix)
+    app.include_router(analytics_router, prefix=settings.api_prefix)
 
     return app
 

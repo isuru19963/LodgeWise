@@ -52,12 +52,46 @@ features/units/
 ```
 features/bookings/
 ├── components/   # list, form, card, calendar, status badge
-├── hooks/        # useBookings, useAvailability, useGuests
+├── hooks/        # useBookings, useAvailability (guests via features/guests)
 ├── schemas/
-└── services/     # GET/POST /bookings, GET /availability, guests
+└── services/     # GET/POST /bookings, GET /availability
 ```
 
-Pages: `/bookings`, `/calendar`
+### Guests feature
+
+```
+features/guests/
+├── components/   # list, card, form, profile, booking history
+├── hooks/        # useGuests, useGuest, useCreateGuest
+├── schemas/
+└── services/     # GET/POST /guests, GET /guests/{id}
+```
+
+Pages: `/bookings`, `/calendar`, `/guests`, `/guests/[id]`
+
+### AI Assistant feature
+
+```
+features/ai/
+├── components/   # chat-window, message-list, message-input, source-citation
+├── hooks/        # useAiChat
+├── services/     # POST /ai/chat
+└── types/        # provider-agnostic chat types (+ streaming stubs)
+```
+
+Page: `/ai`
+
+### Analytics feature
+
+```
+features/analytics/
+├── components/   # stats, revenue, occupancy, bookings, property table
+├── hooks/        # useAnalytics*
+├── services/     # GET /analytics/overview|revenue|occupancy|bookings|properties
+└── types/
+```
+
+Page: `/analytics` (live API via auth token; org-scoped)
 
 ## Auth & API foundation
 
