@@ -64,6 +64,7 @@ This is a monorepo. See the root [README](../README.md) for the layout and
 | [PRODUCT_REQUIREMENTS.md](./PRODUCT_REQUIREMENTS.md) | Functional and non-functional requirements |
 | [SYSTEM_ARCHITECTURE.md](./SYSTEM_ARCHITECTURE.md) | Architecture, services, and infrastructure |
 | [DATABASE_DESIGN.md](./DATABASE_DESIGN.md) | Multi-tenant data model and schema strategy |
+| [DATABASE_ERD.md](./DATABASE_ERD.md) | Entity relationship diagram and isolation flow |
 | [API_SPECIFICATION.md](./API_SPECIFICATION.md) | API conventions and endpoint catalog |
 | [AI_ARCHITECTURE.md](./AI_ARCHITECTURE.md) | AI services, workflows, and model strategy |
 | [DEVELOPMENT_ROADMAP.md](./DEVELOPMENT_ROADMAP.md) | Phased delivery plan |

@@ -57,6 +57,7 @@ multi-tenant SaaS platform designed to scale to 1000+ properties.
 | [PRODUCT_REQUIREMENTS.md](docs/PRODUCT_REQUIREMENTS.md) | Functional & non-functional requirements |
 | [SYSTEM_ARCHITECTURE.md](docs/SYSTEM_ARCHITECTURE.md) | Services, tenancy model, infrastructure |
 | [DATABASE_DESIGN.md](docs/DATABASE_DESIGN.md) | Data model & migration strategy |
+| [DATABASE_ERD.md](docs/DATABASE_ERD.md) | Entity relationship diagram & isolation flow |
 | [API_SPECIFICATION.md](docs/API_SPECIFICATION.md) | API conventions & endpoint catalog |
 | [AI_ARCHITECTURE.md](docs/AI_ARCHITECTURE.md) | AI capabilities, safety, phasing |
 | [DEVELOPMENT_ROADMAP.md](docs/DEVELOPMENT_ROADMAP.md) | Phased delivery plan |
@@ -67,19 +68,35 @@ multi-tenant SaaS platform designed to scale to 1000+ properties.
 | Layer | Technology |
 |-------|------------|
 | Frontend | Next.js (TypeScript), shared design system |
-| Backend | FastAPI (Python 3.12+), async SQLAlchemy |
-| Database | PostgreSQL 16+ (row-level security for tenancy), Redis |
+| Backend | FastAPI (Python 3.13), async SQLAlchemy |
+| Database | PostgreSQL 17 (row-level security for tenancy), Redis |
 | AI | LLM provider abstraction, pgvector, ML pipelines |
 | Infra | Docker, nginx, GitHub Actions CI/CD |
 
 ## Getting Started (Local Development)
 
-Dependencies are intentionally **not installed yet** — this repository currently
-contains structure and documentation only. Once scaffolding lands:
+Requires [Docker](https://docs.docker.com/get-docker/) with Compose v2.
+
+**Start the development environment:**
 
 ```bash
-cp .env.example .env      # configure local environment
-docker compose up -d      # start Postgres, Redis, api, web
+cp .env.example .env      # configure local environment (defaults work out of the box)
+docker compose up -d      # start Postgres 17, Redis, and the API (hot reload)
+```
+
+Then verify:
+
+- API health check: <http://localhost:8000/health> → `{"status": "ok"}`
+- API docs: <http://localhost:8000/api/v1/docs>
+- PostgreSQL on `localhost:5432`, Redis on `localhost:6379`
+
+The API container bind-mounts `apps/api`, so code changes reload automatically.
+
+**Stop:**
+
+```bash
+docker compose down       # stop containers (data volumes are preserved)
+docker compose down -v    # stop and delete data volumes (fresh start)
 ```
 
 ## Contributing

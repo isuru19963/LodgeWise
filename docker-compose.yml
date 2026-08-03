@@ -1,106 +1,82 @@
 # =============================================================================
 # Lodgwise AI — Local Development Stack
 #
-# Infrastructure services only for now. Application services (web, api, ai,
-# worker) are stubbed and commented out until their Dockerfiles land in
-# infra/docker/ during Phase 0 scaffolding.
-#
 # Usage:
 #   cp .env.example .env
 #   docker compose up -d
+#
+# Services: PostgreSQL 17, Redis, and the FastAPI backend with hot reload
+# (apps/api is bind-mounted; code changes restart the server automatically).
+# Future services (web, ai, worker, nginx) will be added as they are scaffolded.
 # =============================================================================
 
 name: lodgwise-ai
 
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-lodgwise}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lodgwise}
       POSTGRES_DB: ${POSTGRES_DB:-lodgwise}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - lodgwise
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lodgwise}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lodgwise} -d ${POSTGRES_DB:-lodgwise}"]
       interval: 5s
       timeout: 5s
       retries: 10
 
   redis:
-    image: redis:7-alpine
+    image: redis:alpine
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redisdata:/data
+    networks:
+      - lodgwise
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 10
 
-  # ---------------------------------------------------------------------------
-  # Application services — enable once scaffolded (Phase 0).
-  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # Inside the compose network the services are reached by name,
+      # overriding any localhost values from .env.
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-lodgwise}:${POSTGRES_PASSWORD:-lodgwise}@postgres:5432/${POSTGRES_DB:-lodgwise}
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    volumes:
+      # Bind-mount source for hot reload; keep container-side venv/caches out.
+      - ./apps/api:/app
+      - /app/.venv
+    networks:
+      - lodgwise
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
-  # api:
-  #   build:
-  #     context: .
-  #     dockerfile: infra/docker/api.Dockerfile
-  #   env_file: .env
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     redis:
-  #       condition: service_healthy
-
-  # web:
-  #   build:
-  #     context: .
-  #     dockerfile: infra/docker/web.Dockerfile
-  #   env_file: .env
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - api
-
-  # ai:
-  #   build:
-  #     context: .
-  #     dockerfile: infra/docker/ai.Dockerfile
-  #   env_file: .env
-  #   ports:
-  #     - "8100:8100"
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-
-  # worker:
-  #   build:
-  #     context: .
-  #     dockerfile: infra/docker/worker.Dockerfile
-  #   env_file: .env
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     redis:
-  #       condition: service_healthy
-
-  # nginx:
-  #   image: nginx:1.27-alpine
-  #   volumes:
-  #     - ./infra/nginx:/etc/nginx/conf.d:ro
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - web
-  #     - api
+networks:
+  lodgwise:
+    driver: bridge
 
 volumes:
   pgdata:
