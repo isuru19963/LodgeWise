@@ -13,25 +13,40 @@ rates, guests, operations, and billing.
 
 ```
 app/
-├── main.py          # App factory, middleware, router mounting
+├── main.py          # App factory, middleware, router mounting, error mapping
 ├── core/
 │   ├── config.py    # Pydantic settings (environment-driven)
-│   └── security.py  # Security helpers (auth arrives in a later phase)
+│   ├── security.py  # Password hashing (argon2) + JWT issue/verify
+│   └── exceptions.py# Domain exceptions mapped to HTTP in one place
 ├── database/
 │   ├── base.py      # Declarative Base, naming conventions, mixins
 │   └── session.py   # Async engine, session factory, get_db dependency
-├── models/          # SQLAlchemy models (empty — added per domain)
-├── schemas/         # Pydantic request/response models
-├── routers/         # HTTP layer — thin, delegates to services
-├── services/        # Application logic (empty — added per domain)
-└── utils/           # Small shared helpers
+├── models/          # SQLAlchemy models (Organization, User, …)
+├── modules/         # Domain modules: router / service / schemas per domain
+│   ├── auth/        # register, login, refresh + auth/tenant dependencies
+│   ├── organizations/
+│   └── users/
+├── schemas/         # Cross-domain Pydantic models (health, …)
+├── routers/         # Unversioned infrastructure routes (health)
+├── services/        # Reserved for cross-domain application services
+└── utils/           # Small shared helpers (slugify, …)
 tests/               # pytest (async, httpx client)
 alembic/             # Migration environment (async)
 ```
 
-**Dependency rule** (clean architecture): `routers → services → models`;
-`core` and `database` are infrastructure used by all layers. Nothing imports
-from `routers`.
+**Dependency rule** (clean architecture): `router → service → models`
+inside each module; `core` and `database` are infrastructure used by all
+layers. Modules never import another module's router.
+
+## Auth & tenancy
+
+- `POST /api/v1/auth/register` creates an organization + OWNER, returns a
+  JWT pair; `/auth/login` and `/auth/refresh` complete the flow.
+- Roles: `OWNER > ADMIN > MANAGER > STAFF`; guard routes with
+  `require_role(UserRole.ADMIN)`.
+- Tenant context is resolved from the verified JWT via `CurrentTenant`;
+  `TenantDB` yields a session with `app.tenant_id` set for the RLS policies
+  that ship with the first tenant-owned domain tables.
 
 ## Getting started
 

@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379/0"
     secret_key: str = "change-me-generate-a-real-secret"
 
+    jwt_algorithm: str = "HS256"
+    jwt_access_token_ttl_seconds: int = 900  # 15 minutes
+    jwt_refresh_token_ttl_seconds: int = 1_209_600  # 14 days
+
     api_title: str = "Lodgwise AI API"
     api_version: str = "0.1.0"
     api_prefix: str = "/api/v1"
